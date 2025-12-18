@@ -34,13 +34,22 @@ def show(id):
         print(e)
         return response.badRequest([], str(e))
 
-def singleTransform(users):
+def singleTransform(users, withTodo=True):
     data = {
         "id" : users.id,
         "name" : users.name,
         "email" : users.email
     }
     
+    if withTodo:
+        todos = []
+        for i in users.todos:
+            todos.append({
+                "id" : i.id,
+                "todo" : i.todo,
+                "description" : i.descripton,
+            })
+        data["todos"] = todos
     return data
 
 def store():
