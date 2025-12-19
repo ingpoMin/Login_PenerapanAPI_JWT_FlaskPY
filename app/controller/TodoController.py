@@ -90,3 +90,27 @@ def delete(id):
     except Exception as e:
         print(e)
         return response.badRequest([], str(e))
+    
+@jwt_required()
+def index():
+    try:
+        id = request.args.get("user_id")
+        todo = Todo.query.filter_by(user_id=id).all()
+        data = transform(todo)
+        return response.ok(data, "")
+    except Exception as e:
+        print(e)
+        return response.badRequest([], str(e))
+
+@jwt_required(refresh=True)
+def refresh():
+    try:
+        user = get_jwt_identity()
+        new_token = create_access_token(identity=user, fresh=False)
+
+        return response.ok({
+            "access_token": new_token
+        }, "")
+    except Exception as e:
+        print(e)
+        return response.badRequest([], str(e))
