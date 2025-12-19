@@ -113,8 +113,17 @@ def login():
         if not user.checkPassword(password):
             return response.badRequest([], "Your credentials is invalid")
         
-        data = singleTransform(user)
-        return response.ok(data, "")
+        data = singleTransform(user, withTodo=False)
+        expires = timedelta(days=1)
+        expire_refresh = timedelta(days=3)
+        access_token = create_access_token(data, fresh=True, expires_delta=expires)
+        refresh_token = create_refresh_token(data, expires_delta=expire_refresh)
+
+        return response.ok({
+            "data" : data,
+            "token_access" : access_token,
+            "token_refresh" : refresh_token,
+        }, "")
     except Exception as e:
         print(e)
         return response.badRequest([], str(e))

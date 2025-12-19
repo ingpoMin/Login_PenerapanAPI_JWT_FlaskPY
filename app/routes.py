@@ -34,7 +34,7 @@ def todo():
     else:
         return TodoController.store()
     
-@app.route ("/todo/<int=id>", methods = ["PUT", "GET", "DELETE"])
+@app.route ("/todo/<id>", methods = ["PUT", "GET", "DELETE"])
 def todoDetail(id):
     if request.method == "GET":
         return TodoController.show(id)

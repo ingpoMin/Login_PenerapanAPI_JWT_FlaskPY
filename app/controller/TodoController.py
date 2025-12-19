@@ -2,10 +2,11 @@ from app.model.todo import Todos as Todo
 from flask import request, jsonify
 from app import response, db
 from app.controller import UserController
+from flask_jwt_extended import *
 
 def index():
     try:
-        id = request.args.get("users_id")
+        id = request.args.get("user_id")
         todo = Todo.query.filter_by(user_id=id).all()
         data = transform(todo)
         return response.ok(data, "")
@@ -16,9 +17,7 @@ def index():
 def transform(values):
     array = []
     for i in values:
-        array.append({
             array.append(singleTransform(i))
-        })
     return array
 
 def show(id):
